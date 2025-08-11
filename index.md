@@ -42,10 +42,10 @@ $$
 
 This loss function is simpler than it looks.
 
-- \(L_0\) is the standard supervised loss: the difference between predicted and true labels for the labeled nodes.
-- \(\lambda\) controls the degree of smoothness enforced—larger values make it harder for differences between connected nodes to remain large, thus encouraging smoother predictions.
-- Inside \(L_{\mathrm{reg}}\), \(A_{ij}\) is the adjacency matrix entry for nodes \(i\) and \(j\), where 1 means they are connected and 0 means they are not.
-- \(f(X_i)\) and \(f(X_j)\) are the model’s predictions for nodes \(i\) and \(j\), respectively. The squared difference between them is multiplied by \(A_{ij}\), so only connected node pairs contribute to the loss.
+- $L_0$ is the standard supervised loss: the difference between predicted and true labels for the labeled nodes.
+- $\lambda$ controls the degree of smoothness enforced—larger values make it harder for differences between connected nodes to remain large, thus encouraging smoother predictions.
+- Inside $L_{\mathrm{reg}}$, $A_{ij}$ is the adjacency matrix entry for nodes $i$ and $j$, where 1 means they are connected and 0 means they are not.
+- $f(X_i)$ and $f(X_j)$ are the model’s predictions for nodes $i$ and $j$, respectively. The squared difference between them is multiplied by $A_{ij}$, so only connected node pairs contribute to the loss.
 
 This means that the loss explicitly penalizes differences in predicted values between connected nodes, pushing them toward being the same. In other words, it encourages predictions to be smooth across edges in the graph.
 
@@ -75,9 +75,9 @@ $$
 H^{(l+1)} = \sigma\left(\tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2} H^{(l)} W^{(l)}\right)
 $$
 
-Here, \(\tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2}\) is the normalized adjacency matrix that mixes each node’s features with those of its neighbors (including itself). \(H^{(l)}\) represents the input features at layer \(l\), \(W^{(l)}\) is the learnable weight matrix, and \(\sigma\) is a nonlinear activation function. In essence, multiplying by the normalized adjacency matrix aggregates information from the neighborhood, multiplying by \(W^{(l)}\) applies a trainable transformation, and \(\sigma\) introduces non-linearity—producing the updated features \(H^{(l+1)}\) for the next layer.
+Here, $\tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2}$ is the normalized adjacency matrix that mixes each node’s features with those of its neighbors (including itself). $H^{(l)}$ represents the input features at layer $l$, $W^{(l)}$ is the learnable weight matrix, and $\sigma$ is a nonlinear activation function. In essence, multiplying by the normalized adjacency matrix aggregates information from the neighborhood, multiplying by $W^{(l)}$ applies a trainable transformation, and $\sigma$ introduces non-linearity—producing the updated features $H^{(l+1)}$ for the next layer.
 
-While GCNs can, in principle, incorporate information from K-hop neighborhoods in a single layer, the authors choose \(K = 1\). This avoids overemphasizing high-degree nodes (nodes connected to many others) and still allows information to propagate further: stacking two layers reaches two-hop neighbors, three layers reach three-hop neighbors, and so on. This makes \(K = 1\) both efficient and effective.
+While GCNs can, in principle, incorporate information from K-hop neighborhoods in a single layer, the authors choose $K = 1$. This avoids overemphasizing high-degree nodes (nodes connected to many others) and still allows information to propagate further: stacking two layers reaches two-hop neighbors, three layers reach three-hop neighbors, and so on. This makes $K = 1$ both efficient and effective.
 
 ## ⚖️ Cost Function
 
@@ -87,13 +87,13 @@ $$
 L = - \sum_{l \in \mathcal{Y}_L} \sum_{f=1}^F Y_{lf} \, \ln Z_{lf}
 $$
 
-- \(\mathcal{Y}_L\): set of labeled node indices.
-- \(F\): number of classes.
-- \(Y_{lf}\): one-hot encoded true label (1 if node \(l\) is in class \(f\), else 0).
-- \(Z_{lf}\): predicted probability (softmax output) that node \(l\) belongs to class \(f\).
+- $\mathcal{Y}_L$: set of labeled node indices.
+- $F$: number of classes.
+- $Y_{lf}$: one-hot encoded true label (1 if node $l$ is in class $f$, else 0).
+- $Z_{lf}$: predicted probability (softmax output) that node $l$ belongs to class $f$.
 
 **How it works**:
-- For each labeled node \(l\), the loss penalizes the model when its predicted probability \(Z_{lf}\) for the true class \(f\) is low. Since \(Y_{lf}\) is zero for all incorrect classes, only the correct class contributes to the loss. Minimizing this pushes the predicted probability for the correct class closer to 1.
+- For each labeled node $l$, the loss penalizes the model when its predicted probability $Z_{lf}$ for the true class $f$ is low. Since $Y_{lf}$ is zero for all incorrect classes, only the correct class contributes to the loss. Minimizing this pushes the predicted probability for the correct class closer to 1.
 
 **Why it works for semi-supervised learning**:
 - Even though the loss is computed only on labeled nodes, the GCN’s propagation rule mixes each node’s features with those of its neighbors. This means that labeled nodes influence their neighbors’ feature representations during training, indirectly guiding the classification of unlabeled nodes.
@@ -133,5 +133,4 @@ In this study, the proposed GCN demonstrated performance that significantly outp
 
 However, the current implementation has certain limitations. In full-batch training, memory usage grows proportionally with the dataset size, which can exceed GPU memory for large graphs. Furthermore, the current framework is naturally designed to handle only undirected graphs, and does not directly support directed edges or edge features.
 
-
-# My Implementation & Results
+## My Implementation & Results
