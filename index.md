@@ -132,3 +132,6 @@ The authors evaluated GCNs on several benchmark datasets for node classification
 In this study, the proposed GCN demonstrated performance that significantly outperforms existing representative methods in semi-supervised node classification tasks. Traditional Laplacian regularization-based methods are limited by the assumption that edges merely represent node similarity, which constrains their expressive power. In contrast, GCN overcomes these limitations through a simple yet efficient framework that propagates feature information from neighboring nodes at each layer, achieving both high classification accuracy and computational efficiency. Notably, the proposed normalized propagation model outperforms both the first-order approximation model and higher-order models using Chebyshev polynomials, while requiring fewer parameters and computations.
 
 However, the current implementation has certain limitations. In full-batch training, memory usage grows proportionally with the dataset size, which can exceed GPU memory for large graphs. Furthermore, the current framework is naturally designed to handle only undirected graphs, and does not directly support directed edges or edge features.
+
+
+# My Implementation & Results
